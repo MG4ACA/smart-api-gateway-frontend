@@ -1,103 +1,253 @@
-import Image from "next/image";
+'use client';
 
-export default function Home() {
+import { useEffect } from 'react';
+import Link from 'next/link';
+import Image from 'next/image';
+import { useAppDispatch, useAppSelector } from '@/store/hooks';
+import { fetchCategories, fetchRandomRecipe } from '@/store/slices/recipeSlice';
+import { ChefHat, Search, Heart, Star, TrendingUp } from 'lucide-react';
+
+export default function HomePage() {
+  const dispatch = useAppDispatch();
+  const { categories, randomRecipe } = useAppSelector((state) => state.recipes);
+  const { isAuthenticated } = useAppSelector((state) => state.auth);
+
+  useEffect(() => {
+    dispatch(fetchCategories());
+    dispatch(fetchRandomRecipe());
+  }, [dispatch]);
+
+  const features = [
+    {
+      icon: ChefHat,
+      title: 'Explore Recipes',
+      description: 'Browse thousands of recipes from different cuisines and categories.',
+      link: '/recipes',
+    },
+    {
+      icon: Search,
+      title: 'Smart Search',
+      description: 'Find recipes by ingredients, dish names, or cooking style.',
+      link: '/search',
+    },
+    {
+      icon: Heart,
+      title: 'Save Favorites',
+      description: 'Create your personal collection of favorite recipes.',
+      link: isAuthenticated ? '/favorites' : '/auth/login',
+    },
+  ];
+
   return (
-    <div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="font-mono list-inside list-decimal text-sm/6 text-center sm:text-left">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] font-mono font-semibold px-1 py-0.5 rounded">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
-
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+    <div className="min-h-screen">
+      {/* Hero Section */}
+      <section className="bg-gradient-to-r from-orange-500 to-red-500 text-white py-20">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center">
+            <h1 className="text-5xl md:text-6xl font-bold mb-6">
+              Smart Recipe Gateway
+            </h1>
+            <p className="text-xl md:text-2xl mb-8 max-w-3xl mx-auto">
+              Discover delicious recipes from around the world, save your favorites, 
+              and create amazing meals with our intelligent recipe platform.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <Link
+                href="/recipes"
+                className="bg-white text-orange-500 px-8 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors"
+              >
+                Explore Recipes
+              </Link>
+              {!isAuthenticated && (
+                <Link
+                  href="/auth/register"
+                  className="border-2 border-white text-white px-8 py-3 rounded-lg font-semibold hover:bg-white hover:text-orange-500 transition-colors"
+                >
+                  Get Started
+                </Link>
+              )}
+            </div>
+          </div>
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+      </section>
+
+      {/* Features Section */}
+      <section className="py-20 bg-gray-50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+              Why Choose Our Recipe Platform?
+            </h2>
+            <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+              Powerful features to help you discover, organize, and enjoy cooking
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {features.map((feature, index) => {
+              const Icon = feature.icon;
+              return (
+                <div key={index} className="bg-white p-8 rounded-lg shadow-lg hover:shadow-xl transition-shadow">
+                  <div className="flex items-center justify-center w-16 h-16 bg-orange-500 text-white rounded-lg mb-6 mx-auto">
+                    <Icon className="h-8 w-8" />
+                  </div>
+                  <h3 className="text-xl font-semibold text-gray-900 mb-4 text-center">
+                    {feature.title}
+                  </h3>
+                  <p className="text-gray-600 text-center mb-6">
+                    {feature.description}
+                  </p>
+                  <div className="text-center">
+                    <Link
+                      href={feature.link}
+                      className="text-orange-500 font-semibold hover:text-orange-600 transition-colors"
+                    >
+                      Learn More →
+                    </Link>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      </section>
+
+      {/* Random Recipe Section */}
+      {randomRecipe && (
+        <section className="py-20">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="text-center mb-12">
+              <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+                Recipe of the Day
+              </h2>
+              <p className="text-xl text-gray-600">
+                Try something new with our featured recipe
+              </p>
+            </div>
+
+            <div className="bg-white rounded-lg shadow-lg overflow-hidden max-w-4xl mx-auto">
+              <div className="md:flex">
+                <div className="md:w-1/2">
+                  <Image
+                    src={randomRecipe.thumbnail}
+                    alt={randomRecipe.name}
+                    className="h-64 md:h-full w-full object-cover"
+                    width={500}
+                    height={300}
+                  />
+                </div>
+                <div className="md:w-1/2 p-8">
+                  <div className="flex items-center mb-4">
+                    <Star className="h-5 w-5 text-yellow-500 mr-2" />
+                    <span className="text-sm text-gray-600">Featured Recipe</span>
+                  </div>
+                  <h3 className="text-2xl font-bold text-gray-900 mb-4">
+                    {randomRecipe.name}
+                  </h3>
+                  <div className="flex items-center space-x-4 mb-6">
+                    {randomRecipe.category && (
+                      <span className="bg-orange-100 text-orange-700 px-3 py-1 rounded-full text-sm">
+                        {randomRecipe.category}
+                      </span>
+                    )}
+                    {randomRecipe.area && (
+                      <span className="bg-blue-100 text-blue-700 px-3 py-1 rounded-full text-sm">
+                        {randomRecipe.area}
+                      </span>
+                    )}
+                  </div>
+                  <p className="text-gray-600 mb-6 line-clamp-3">
+                    {randomRecipe.instructions?.substring(0, 150)}...
+                  </p>
+                  <Link
+                    href={`/recipes/${randomRecipe.id}`}
+                    className="bg-orange-500 text-white px-6 py-3 rounded-lg font-semibold hover:bg-orange-600 transition-colors inline-block"
+                  >
+                    View Recipe
+                  </Link>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* Categories Preview */}
+      {categories.length > 0 && (
+        <section className="py-20 bg-gray-50">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="text-center mb-12">
+              <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+                Popular Categories
+              </h2>
+              <p className="text-xl text-gray-600">
+                Explore recipes by your favorite cuisine type
+              </p>
+            </div>
+
+            <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-6">
+              {categories.slice(0, 12).map((category) => (
+                <Link
+                  key={category.id}
+                  href={`/recipes/category/${category.name}`}
+                  className="group"
+                >
+                  <div className="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow p-4 text-center">
+                    <Image
+                      src={category.thumbnail}
+                      alt={category.name}
+                      className="w-16 h-16 mx-auto mb-3 rounded-lg object-cover group-hover:scale-105 transition-transform"
+                      width={64}
+                      height={64}
+                    />
+                    <h3 className="font-semibold text-gray-900 text-sm">
+                      {category.name}
+                    </h3>
+                  </div>
+                </Link>
+              ))}
+            </div>
+
+            <div className="text-center mt-12">
+              <Link
+                href="/recipes"
+                className="bg-orange-500 text-white px-8 py-3 rounded-lg font-semibold hover:bg-orange-600 transition-colors"
+              >
+                View All Categories
+              </Link>
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* CTA Section */}
+      <section className="py-20 bg-orange-500 text-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <TrendingUp className="h-16 w-16 mx-auto mb-6" />
+          <h2 className="text-3xl md:text-4xl font-bold mb-4">
+            Ready to Start Cooking?
+          </h2>
+          <p className="text-xl mb-8 max-w-2xl mx-auto">
+            Join thousands of food enthusiasts who use our platform to discover 
+            and organize their favorite recipes.
+          </p>
+          {!isAuthenticated ? (
+            <Link
+              href="/auth/register"
+              className="bg-white text-orange-500 px-8 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors"
+            >
+              Create Free Account
+            </Link>
+          ) : (
+            <Link
+              href="/favorites"
+              className="bg-white text-orange-500 px-8 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors"
+            >
+              View Your Favorites
+            </Link>
+          )}
+        </div>
+      </section>
     </div>
   );
 }
