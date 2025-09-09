@@ -1,4 +1,4 @@
-import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
+import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import axios from 'axios';
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000';
@@ -130,7 +130,9 @@ export const searchRecipes = createAsyncThunk(
   ) => {
     try {
       const response = await axios.get(
-        `${API_BASE_URL}/api/recipes/search?q=${encodeURIComponent(searchTerm)}&limit=${limit}&offset=${offset}`
+        `${API_BASE_URL}/api/recipes/search?q=${encodeURIComponent(
+          searchTerm
+        )}&limit=${limit}&offset=${offset}`
       );
       return {
         recipes: response.data.data.recipes,
@@ -184,13 +186,13 @@ const recipeSlice = createSlice({
       .addCase(fetchRecipesByCategory.fulfilled, (state, action) => {
         state.isLoading = false;
         const { recipes, pagination, category } = action.payload;
-        
+
         if (pagination.offset === 0) {
           state.recipes = recipes;
         } else {
           state.recipes = [...state.recipes, ...recipes];
         }
-        
+
         state.pagination = pagination;
         state.currentCategory = category;
       })
@@ -232,13 +234,13 @@ const recipeSlice = createSlice({
       .addCase(searchRecipes.fulfilled, (state, action) => {
         state.isLoading = false;
         const { recipes, pagination, searchTerm } = action.payload;
-        
+
         if (pagination.offset === 0) {
           state.searchResults = recipes;
         } else {
           state.searchResults = [...state.searchResults, ...recipes];
         }
-        
+
         state.pagination = pagination;
         state.searchTerm = searchTerm;
       })
@@ -249,5 +251,6 @@ const recipeSlice = createSlice({
   },
 });
 
-export const { clearCurrentRecipe, clearSearchResults, clearError, setCurrentCategory } = recipeSlice.actions;
+export const { clearCurrentRecipe, clearSearchResults, clearError, setCurrentCategory } =
+  recipeSlice.actions;
 export default recipeSlice.reducer;

@@ -1,4 +1,4 @@
-import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
+import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import axios from 'axios';
 import Cookies from 'js-cookie';
 import { Recipe } from './recipeSlice';
@@ -51,7 +51,10 @@ const getAuthHeaders = () => {
 // Async thunks
 export const fetchFavorites = createAsyncThunk(
   'favorites/fetchFavorites',
-  async ({ limit = 20, offset = 0 }: { limit?: number; offset?: number } = {}, { rejectWithValue }) => {
+  async (
+    { limit = 20, offset = 0 }: { limit?: number; offset?: number } = {},
+    { rejectWithValue }
+  ) => {
     try {
       const response = await axios.get(
         `${API_BASE_URL}/api/favorites?limit=${limit}&offset=${offset}`,
@@ -87,10 +90,9 @@ export const removeFromFavorites = createAsyncThunk(
   'favorites/removeFromFavorites',
   async (recipeId: string, { rejectWithValue }) => {
     try {
-      await axios.delete(
-        `${API_BASE_URL}/api/favorites/${recipeId}`,
-        { headers: getAuthHeaders() }
-      );
+      await axios.delete(`${API_BASE_URL}/api/favorites/${recipeId}`, {
+        headers: getAuthHeaders(),
+      });
       return recipeId;
     } catch (error: any) {
       return rejectWithValue(error.response?.data?.message || 'Failed to remove from favorites');
@@ -102,10 +104,9 @@ export const checkFavoriteStatus = createAsyncThunk(
   'favorites/checkFavoriteStatus',
   async (recipeId: string, { rejectWithValue }) => {
     try {
-      const response = await axios.get(
-        `${API_BASE_URL}/api/favorites/${recipeId}/check`,
-        { headers: getAuthHeaders() }
-      );
+      const response = await axios.get(`${API_BASE_URL}/api/favorites/${recipeId}/check`, {
+        headers: getAuthHeaders(),
+      });
       return {
         recipeId,
         ...response.data.data,
@@ -120,10 +121,9 @@ export const fetchFavoriteStats = createAsyncThunk(
   'favorites/fetchFavoriteStats',
   async (_, { rejectWithValue }) => {
     try {
-      const response = await axios.get(
-        `${API_BASE_URL}/api/favorites/stats`,
-        { headers: getAuthHeaders() }
-      );
+      const response = await axios.get(`${API_BASE_URL}/api/favorites/stats`, {
+        headers: getAuthHeaders(),
+      });
       return response.data.data;
     } catch (error: any) {
       return rejectWithValue(error.response?.data?.message || 'Failed to fetch favorite stats');
@@ -143,11 +143,14 @@ const favoritesSlice = createSlice({
     clearError: (state) => {
       state.error = null;
     },
-    updateFavoriteInList: (state, action: PayloadAction<{ recipeId: string; isFavorite: boolean }>) => {
+    updateFavoriteInList: (
+      state,
+      action: PayloadAction<{ recipeId: string; isFavorite: boolean }>
+    ) => {
       const { recipeId, isFavorite } = action.payload;
       if (!isFavorite) {
         // Remove from favorites list
-        state.favorites = state.favorites.filter(fav => fav.recipeId !== recipeId);
+        state.favorites = state.favorites.filter((fav) => fav.recipeId !== recipeId);
         state.pagination.total = Math.max(0, state.pagination.total - 1);
       }
     },
@@ -162,13 +165,13 @@ const favoritesSlice = createSlice({
       .addCase(fetchFavorites.fulfilled, (state, action) => {
         state.isLoading = false;
         const { favorites, pagination } = action.payload;
-        
+
         if (pagination.offset === 0) {
           state.favorites = favorites;
         } else {
           state.favorites = [...state.favorites, ...favorites];
         }
-        
+
         state.pagination = pagination;
       })
       .addCase(fetchFavorites.rejected, (state, action) => {
@@ -199,7 +202,7 @@ const favoritesSlice = createSlice({
       })
       .addCase(removeFromFavorites.fulfilled, (state, action) => {
         const recipeId = action.payload;
-        state.favorites = state.favorites.filter(fav => fav.recipeId !== recipeId);
+        state.favorites = state.favorites.filter((fav) => fav.recipeId !== recipeId);
         state.pagination.total = Math.max(0, state.pagination.total - 1);
       })
       .addCase(removeFromFavorites.rejected, (state, action) => {

@@ -1,4 +1,4 @@
-import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
+import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import axios from 'axios';
 import Cookies from 'js-cookie';
 
@@ -35,10 +35,10 @@ export const register = createAsyncThunk(
     try {
       const response = await axios.post(`${API_BASE_URL}/api/auth/register`, userData);
       const { user, token } = response.data;
-      
+
       // Store token in cookie
       Cookies.set('auth_token', token, { expires: 7 });
-      
+
       return { user, token };
     } catch (error: any) {
       return rejectWithValue(error.response?.data?.message || 'Registration failed');
@@ -52,10 +52,10 @@ export const login = createAsyncThunk(
     try {
       const response = await axios.post(`${API_BASE_URL}/api/auth/login`, credentials);
       const { user, token } = response.data;
-      
+
       // Store token in cookie
       Cookies.set('auth_token', token, { expires: 7 });
-      
+
       return { user, token };
     } catch (error: any) {
       return rejectWithValue(error.response?.data?.message || 'Login failed');
@@ -69,7 +69,7 @@ export const getProfile = createAsyncThunk(
     try {
       const state = getState() as { auth: AuthState };
       const token = state.auth.token || Cookies.get('auth_token');
-      
+
       if (!token) {
         throw new Error('No token found');
       }
@@ -77,7 +77,7 @@ export const getProfile = createAsyncThunk(
       const response = await axios.get(`${API_BASE_URL}/api/auth/profile`, {
         headers: { Authorization: `Bearer ${token}` },
       });
-      
+
       return response.data.user;
     } catch (error: any) {
       return rejectWithValue(error.response?.data?.message || 'Failed to fetch profile');
@@ -85,16 +85,13 @@ export const getProfile = createAsyncThunk(
   }
 );
 
-export const initializeAuth = createAsyncThunk(
-  'auth/initialize',
-  async (_, { dispatch }) => {
-    const token = Cookies.get('auth_token');
-    if (token) {
-      dispatch(setToken(token));
-      dispatch(getProfile());
-    }
+export const initializeAuth = createAsyncThunk('auth/initialize', async (_, { dispatch }) => {
+  const token = Cookies.get('auth_token');
+  if (token) {
+    dispatch(setToken(token));
+    dispatch(getProfile());
   }
-);
+});
 
 const authSlice = createSlice({
   name: 'auth',
