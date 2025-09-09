@@ -1,11 +1,11 @@
 'use client';
 
-import { useEffect } from 'react';
-import Link from 'next/link';
-import Image from 'next/image';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import { fetchCategories, fetchRandomRecipe } from '@/store/slices/recipeSlice';
-import { ChefHat, Search, Heart, Star, TrendingUp } from 'lucide-react';
+import { ChefHat, Heart, Search, Star, TrendingUp } from 'lucide-react';
+import Image from 'next/image';
+import Link from 'next/link';
+import { useEffect } from 'react';
 
 export default function HomePage() {
   const dispatch = useAppDispatch();
@@ -44,12 +44,10 @@ export default function HomePage() {
       <section className="bg-gradient-to-r from-orange-500 to-red-500 text-white py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center">
-            <h1 className="text-5xl md:text-6xl font-bold mb-6">
-              Smart Recipe Gateway
-            </h1>
+            <h1 className="text-5xl md:text-6xl font-bold mb-6">Smart Recipe Gateway</h1>
             <p className="text-xl md:text-2xl mb-8 max-w-3xl mx-auto">
-              Discover delicious recipes from around the world, save your favorites, 
-              and create amazing meals with our intelligent recipe platform.
+              Discover delicious recipes from around the world, save your favorites, and create
+              amazing meals with our intelligent recipe platform.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link
@@ -87,16 +85,17 @@ export default function HomePage() {
             {features.map((feature, index) => {
               const Icon = feature.icon;
               return (
-                <div key={index} className="bg-white p-8 rounded-lg shadow-lg hover:shadow-xl transition-shadow">
+                <div
+                  key={index}
+                  className="bg-white p-8 rounded-lg shadow-lg hover:shadow-xl transition-shadow"
+                >
                   <div className="flex items-center justify-center w-16 h-16 bg-orange-500 text-white rounded-lg mb-6 mx-auto">
                     <Icon className="h-8 w-8" />
                   </div>
                   <h3 className="text-xl font-semibold text-gray-900 mb-4 text-center">
                     {feature.title}
                   </h3>
-                  <p className="text-gray-600 text-center mb-6">
-                    {feature.description}
-                  </p>
+                  <p className="text-gray-600 text-center mb-6">{feature.description}</p>
                   <div className="text-center">
                     <Link
                       href={feature.link}
@@ -120,9 +119,7 @@ export default function HomePage() {
               <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
                 Recipe of the Day
               </h2>
-              <p className="text-xl text-gray-600">
-                Try something new with our featured recipe
-              </p>
+              <p className="text-xl text-gray-600">Try something new with our featured recipe</p>
             </div>
 
             <div className="bg-white rounded-lg shadow-lg overflow-hidden max-w-4xl mx-auto">
@@ -141,9 +138,7 @@ export default function HomePage() {
                     <Star className="h-5 w-5 text-yellow-500 mr-2" />
                     <span className="text-sm text-gray-600">Featured Recipe</span>
                   </div>
-                  <h3 className="text-2xl font-bold text-gray-900 mb-4">
-                    {randomRecipe.name}
-                  </h3>
+                  <h3 className="text-2xl font-bold text-gray-900 mb-4">{randomRecipe.name}</h3>
                   <div className="flex items-center space-x-4 mb-6">
                     {randomRecipe.category && (
                       <span className="bg-orange-100 text-orange-700 px-3 py-1 rounded-full text-sm">
@@ -180,9 +175,7 @@ export default function HomePage() {
               <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
                 Popular Categories
               </h2>
-              <p className="text-xl text-gray-600">
-                Explore recipes by your favorite cuisine type
-              </p>
+              <p className="text-xl text-gray-600">Explore recipes by your favorite cuisine type</p>
             </div>
 
             <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-6">
@@ -200,9 +193,7 @@ export default function HomePage() {
                       width={64}
                       height={64}
                     />
-                    <h3 className="font-semibold text-gray-900 text-sm">
-                      {category.name}
-                    </h3>
+                    <h3 className="font-semibold text-gray-900 text-sm">{category.name}</h3>
                   </div>
                 </Link>
               ))}
@@ -224,12 +215,10 @@ export default function HomePage() {
       <section className="py-20 bg-orange-500 text-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <TrendingUp className="h-16 w-16 mx-auto mb-6" />
-          <h2 className="text-3xl md:text-4xl font-bold mb-4">
-            Ready to Start Cooking?
-          </h2>
+          <h2 className="text-3xl md:text-4xl font-bold mb-4">Ready to Start Cooking?</h2>
           <p className="text-xl mb-8 max-w-2xl mx-auto">
-            Join thousands of food enthusiasts who use our platform to discover 
-            and organize their favorite recipes.
+            Join thousands of food enthusiasts who use our platform to discover and organize their
+            favorite recipes.
           </p>
           {!isAuthenticated ? (
             <Link

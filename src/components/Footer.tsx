@@ -9,7 +9,7 @@ export function Footer() {
               Discover, save, and enjoy delicious recipes from around the world.
             </p>
           </div>
-          
+
           <div>
             <h3 className="text-lg font-semibold mb-4">Features</h3>
             <ul className="space-y-2 text-gray-300">
@@ -19,15 +19,13 @@ export function Footer() {
               <li>Detailed cooking instructions</li>
             </ul>
           </div>
-          
+
           <div>
             <h3 className="text-lg font-semibold mb-4">API</h3>
-            <p className="text-gray-300">
-              Powered by TheMealDB API for comprehensive recipe data.
-            </p>
+            <p className="text-gray-300">Powered by TheMealDB API for comprehensive recipe data.</p>
           </div>
         </div>
-        
+
         <div className="border-t border-gray-700 mt-8 pt-8 text-center text-gray-300">
           <p>&copy; 2024 Smart Recipe Gateway. Built with Next.js and Express.</p>
         </div>
