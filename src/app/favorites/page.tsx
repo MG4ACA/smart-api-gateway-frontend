@@ -34,8 +34,8 @@ export default function FavoritesPage() {
   };
 
   // Filter favorites based on search term
-  const filteredFavorites = favorites.filter((favorite) =>
-    favorite.recipe?.name?.toLowerCase().includes(searchTerm.toLowerCase()) || false
+  const filteredFavorites = favorites.filter(
+    (favorite) => favorite.recipe?.name?.toLowerCase().includes(searchTerm.toLowerCase()) || false
   );
 
   if (!isAuthenticated) {

@@ -61,9 +61,9 @@ export default function CategoryPage() {
 
           {/* Stats and View Toggle */}
           <div className="flex items-center justify-between">
-              <p className="text-gray-600">
-                {recipes.length} recipe{recipes.length !== 1 ? 's' : ''} found
-              </p>
+            <p className="text-gray-600">
+              {recipes.length} recipe{recipes.length !== 1 ? 's' : ''} found
+            </p>
 
             <div className="flex items-center gap-4">
               {/* Search in Category */}
@@ -106,7 +106,7 @@ export default function CategoryPage() {
 
       {/* Recipe Grid */}
       <div className="max-w-6xl mx-auto px-6 py-8">
-  {recipes.length > 0 ? (
+        {recipes.length > 0 ? (
           <>
             {/* Grid View */}
             {viewMode === 'grid' && (
