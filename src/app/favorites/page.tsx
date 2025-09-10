@@ -22,7 +22,7 @@ export default function FavoritesPage() {
       router.push('/auth/login');
       return;
     }
-    dispatch(fetchFavorites());
+    dispatch(fetchFavorites({}));
   }, [dispatch, isAuthenticated, router]);
 
   const handleRemoveFavorite = async (recipeId: string) => {
@@ -35,7 +35,7 @@ export default function FavoritesPage() {
 
   // Filter favorites based on search term
   const filteredFavorites = favorites.filter((favorite) =>
-    favorite.recipeName.toLowerCase().includes(searchTerm.toLowerCase())
+    favorite.recipe?.name?.toLowerCase().includes(searchTerm.toLowerCase()) || false
   );
 
   if (!isAuthenticated) {
@@ -135,8 +135,8 @@ export default function FavoritesPage() {
                   >
                     <div className="aspect-[4/3] relative">
                       <RecipeImage
-                        src={favorite.recipeImage || '/images/recipe-placeholder.jpg'}
-                        alt={favorite.recipeName || 'Recipe'}
+                        src={favorite.recipe?.thumbnail || '/images/recipe-placeholder.svg'}
+                        alt={favorite.recipe?.name || 'Recipe'}
                         fill
                         className="object-cover group-hover:scale-105 transition-transform duration-300"
                       />
@@ -152,7 +152,7 @@ export default function FavoritesPage() {
                     </div>
                     <div className="p-5">
                       <h3 className="font-bold text-lg text-gray-900 mb-3 line-clamp-2">
-                        {favorite.recipeName}
+                        {favorite.recipe?.name || 'Unknown Recipe'}
                       </h3>
 
                       <div className="flex items-center justify-between">
@@ -183,8 +183,8 @@ export default function FavoritesPage() {
                   >
                     <div className="w-48 h-32 relative flex-shrink-0">
                       <RecipeImage
-                        src={favorite.recipeImage || '/images/recipe-placeholder.jpg'}
-                        alt={favorite.recipeName || 'Recipe'}
+                        src={favorite.recipe?.thumbnail || '/images/recipe-placeholder.svg'}
+                        alt={favorite.recipe?.name || 'Recipe'}
                         fill
                         className="object-cover group-hover:scale-105 transition-transform duration-300"
                       />
@@ -192,7 +192,7 @@ export default function FavoritesPage() {
                     <div className="flex-1 p-6 flex items-center justify-between">
                       <div className="flex-1">
                         <h3 className="font-bold text-xl text-gray-900 mb-2">
-                          {favorite.recipeName}
+                          {favorite.recipe?.name || 'Unknown Recipe'}
                         </h3>
                         <p className="text-gray-500 text-sm">
                           Added to favorites on {new Date(favorite.createdAt).toLocaleDateString()}

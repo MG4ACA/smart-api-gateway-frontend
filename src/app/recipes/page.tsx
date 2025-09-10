@@ -9,7 +9,7 @@ import { useEffect, useState } from 'react';
 
 export default function RecipesPage() {
   const dispatch = useAppDispatch();
-  const { categories, searchResults, isLoading, searchTerm } = useAppSelector(
+  const { categories, recipes, searchResults, isLoading, searchTerm } = useAppSelector(
     (state) => state.recipes
   );
 
@@ -24,7 +24,7 @@ export default function RecipesPage() {
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
     if (localSearchTerm.trim()) {
-      dispatch(searchRecipes(localSearchTerm));
+      dispatch(searchRecipes({ searchTerm: localSearchTerm.trim() }));
       setSelectedCategory('all');
     }
   };
@@ -34,12 +34,13 @@ export default function RecipesPage() {
     if (category === 'all') {
       // Reset to show categories
     } else {
-      dispatch(fetchRecipesByCategory(category));
+      dispatch(fetchRecipesByCategory({ category }));
     }
     setLocalSearchTerm('');
   };
 
-  const displayedRecipes = searchResults;
+  // If there's an active search show search results, otherwise show category/featured recipes
+  const displayedRecipes = searchTerm ? searchResults : recipes;
 
   return (
     <div className="min-h-screen bg-gray-50">
