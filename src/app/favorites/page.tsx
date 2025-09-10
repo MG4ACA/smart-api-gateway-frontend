@@ -1,9 +1,9 @@
 'use client';
 
+import RecipeImage from '@/components/RecipeImage';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import { fetchFavorites, removeFromFavorites } from '@/store/slices/favoritesSlice';
 import { ChefHat, ExternalLink, Grid, Heart, List, Search, Trash2 } from 'lucide-react';
-import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
@@ -134,9 +134,9 @@ export default function FavoritesPage() {
                     className="group bg-white rounded-xl shadow-sm hover:shadow-lg transition-all duration-300 overflow-hidden"
                   >
                     <div className="aspect-[4/3] relative">
-                      <Image
+                      <RecipeImage
                         src={favorite.recipeImage || '/images/recipe-placeholder.jpg'}
-                        alt={favorite.recipeName}
+                        alt={favorite.recipeName || 'Recipe'}
                         fill
                         className="object-cover group-hover:scale-105 transition-transform duration-300"
                       />
@@ -182,9 +182,9 @@ export default function FavoritesPage() {
                     className="group bg-white rounded-xl shadow-sm hover:shadow-lg transition-all duration-300 overflow-hidden flex"
                   >
                     <div className="w-48 h-32 relative flex-shrink-0">
-                      <Image
+                      <RecipeImage
                         src={favorite.recipeImage || '/images/recipe-placeholder.jpg'}
-                        alt={favorite.recipeName}
+                        alt={favorite.recipeName || 'Recipe'}
                         fill
                         className="object-cover group-hover:scale-105 transition-transform duration-300"
                       />

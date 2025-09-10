@@ -1,10 +1,10 @@
 'use client';
 
+import RecipeImage from '@/components/RecipeImage';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import { addToFavorites, removeFromFavorites } from '@/store/slices/favoritesSlice';
 import { fetchRecipeById } from '@/store/slices/recipeSlice';
 import { ArrowLeft, CheckCircle, ChefHat, ExternalLink, Globe, Heart, Star } from 'lucide-react';
-import Image from 'next/image';
 import Link from 'next/link';
 import { useParams, useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
@@ -80,16 +80,21 @@ export default function RecipeDetailPage() {
     );
   }
 
-  // Parse ingredients
-  const ingredients = [];
-  for (let i = 1; i <= 20; i++) {
-    const ingredient = currentRecipe[`strIngredient${i}`];
-    const measure = currentRecipe[`strMeasure${i}`];
-    if (ingredient && ingredient.trim()) {
-      ingredients.push({
-        ingredient: ingredient.trim(),
-        measure: measure ? measure.trim() : '',
-      });
+  // Use ingredients from the recipe if available, otherwise parse from raw data
+  const ingredients = currentRecipe.ingredients || [];
+
+  // If no ingredients array, try to parse from raw data (for backward compatibility)
+  if (ingredients.length === 0) {
+    for (let i = 1; i <= 20; i++) {
+      const rawRecipe = currentRecipe as unknown as Record<string, unknown>;
+      const ingredient = rawRecipe[`strIngredient${i}`] as string;
+      const measure = rawRecipe[`strMeasure${i}`] as string;
+      if (ingredient && ingredient.trim()) {
+        ingredients.push({
+          name: ingredient.trim(),
+          measure: measure ? measure.trim() : '',
+        });
+      }
     }
   }
 
@@ -102,8 +107,8 @@ export default function RecipeDetailPage() {
     <div className="min-h-screen bg-gray-50">
       {/* Hero Section */}
       <div className="relative h-96 md:h-[500px]">
-        <Image
-          src={currentRecipe.thumbnail}
+        <RecipeImage
+          src={currentRecipe.thumbnail || '/images/recipe-placeholder.jpg'}
           alt={currentRecipe.name}
           fill
           className="object-cover"
@@ -145,10 +150,12 @@ export default function RecipeDetailPage() {
                 <ChefHat className="h-5 w-5" />
                 <span>{currentRecipe.category}</span>
               </div>
-              {currentRecipe.tags && (
+              {currentRecipe.tags && currentRecipe.tags.length > 0 && (
                 <div className="flex items-center gap-2">
                   <Star className="h-5 w-5" />
-                  <span>{currentRecipe.tags.split(',')[0]}</span>
+                  <span>
+                    {Array.isArray(currentRecipe.tags) ? currentRecipe.tags[0] : currentRecipe.tags}
+                  </span>
                 </div>
               )}
             </div>
@@ -180,7 +187,7 @@ export default function RecipeDetailPage() {
           >
             Instructions
           </button>
-          {currentRecipe.strYoutube && (
+          {currentRecipe.youtube && (
             <button
               onClick={() => setActiveTab('video')}
               className={`px-6 py-3 font-semibold border-b-2 transition-colors ${
@@ -204,7 +211,7 @@ export default function RecipeDetailPage() {
                   <div key={index} className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg">
                     <CheckCircle className="h-5 w-5 text-green-600 flex-shrink-0" />
                     <span className="text-gray-900">
-                      <span className="font-medium">{item.measure}</span> {item.ingredient}
+                      <span className="font-medium">{item.measure}</span> {item.name}
                     </span>
                   </div>
                 ))}
@@ -228,7 +235,7 @@ export default function RecipeDetailPage() {
             </div>
           )}
 
-          {activeTab === 'video' && currentRecipe.strYoutube && (
+          {activeTab === 'video' && currentRecipe.youtube && (
             <div>
               <h3 className="text-2xl font-bold text-gray-900 mb-6">Video Tutorial</h3>
               <div className="aspect-video bg-gray-100 rounded-lg flex items-center justify-center">
@@ -236,7 +243,7 @@ export default function RecipeDetailPage() {
                   <ExternalLink className="h-12 w-12 text-gray-400 mx-auto mb-4" />
                   <p className="text-gray-600 mb-4">Watch the video tutorial on YouTube</p>
                   <a
-                    href={currentRecipe.strYoutube}
+                    href={currentRecipe.youtube}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="bg-red-600 hover:bg-red-700 text-white px-6 py-3 rounded-lg font-semibold transition-colors inline-flex items-center gap-2"
@@ -251,10 +258,10 @@ export default function RecipeDetailPage() {
         </div>
 
         {/* Source Link */}
-        {currentRecipe.strSource && (
+        {currentRecipe.source && (
           <div className="mt-8 text-center">
             <a
-              href={currentRecipe.strSource}
+              href={currentRecipe.source}
               target="_blank"
               rel="noopener noreferrer"
               className="text-orange-600 hover:text-orange-700 font-medium inline-flex items-center gap-2"

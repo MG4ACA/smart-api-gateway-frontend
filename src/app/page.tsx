@@ -1,9 +1,9 @@
 'use client';
 
+import RecipeImage from '@/components/RecipeImage';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import { fetchCategories, fetchRandomRecipe } from '@/store/slices/recipeSlice';
 import { ChefHat, Heart, Search, Star, TrendingUp } from 'lucide-react';
-import Image from 'next/image';
 import Link from 'next/link';
 import { useEffect } from 'react';
 
@@ -125,8 +125,8 @@ export default function HomePage() {
             <div className="bg-white rounded-lg shadow-lg overflow-hidden max-w-4xl mx-auto">
               <div className="md:flex">
                 <div className="md:w-1/2">
-                  <Image
-                    src={randomRecipe.thumbnail}
+                  <RecipeImage
+                    src={randomRecipe.thumbnail || '/images/recipe-placeholder.jpg'}
                     alt={randomRecipe.name}
                     className="h-64 md:h-full w-full object-cover"
                     width={500}
@@ -186,7 +186,7 @@ export default function HomePage() {
                   className="group"
                 >
                   <div className="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow p-4 text-center">
-                    <Image
+                    <RecipeImage
                       src={category.thumbnail}
                       alt={category.name}
                       className="w-16 h-16 mx-auto mb-3 rounded-lg object-cover group-hover:scale-105 transition-transform"

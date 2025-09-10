@@ -1,9 +1,9 @@
 'use client';
 
+import RecipeImage from '@/components/RecipeImage';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import { fetchCategories, fetchRecipesByCategory, searchRecipes } from '@/store/slices/recipeSlice';
 import { ChefHat, Filter, Globe, Grid, List, Search } from 'lucide-react';
-import Image from 'next/image';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 
@@ -140,7 +140,7 @@ export default function RecipesPage() {
                   className="group bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow overflow-hidden"
                 >
                   <div className="aspect-square relative">
-                    <Image
+                    <RecipeImage
                       src={category.thumbnail}
                       alt={category.name}
                       fill
@@ -184,7 +184,7 @@ export default function RecipesPage() {
                     className="group bg-white rounded-xl shadow-sm hover:shadow-lg transition-shadow overflow-hidden"
                   >
                     <div className="aspect-[4/3] relative">
-                      <Image
+                      <RecipeImage
                         src={recipe.thumbnail || '/images/recipe-placeholder.jpg'}
                         alt={recipe.name}
                         fill
@@ -239,7 +239,7 @@ export default function RecipesPage() {
                     className="group bg-white rounded-xl shadow-sm hover:shadow-lg transition-shadow overflow-hidden flex"
                   >
                     <div className="w-48 h-32 relative flex-shrink-0">
-                      <Image
+                      <RecipeImage
                         src={recipe.thumbnail || '/images/recipe-placeholder.jpg'}
                         alt={recipe.name}
                         fill
