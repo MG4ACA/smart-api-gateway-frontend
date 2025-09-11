@@ -2,11 +2,38 @@
 
 import RecipeImage from '@/components/RecipeImage';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
-import { fetchFavorites, removeFromFavorites } from '@/store/slices/favoritesSlice';
+import {
+  fetchFavorites,
+  fetchFavoriteStats,
+  removeFromFavorites,
+} from '@/store/slices/favoritesSlice';
 import { ChefHat, ExternalLink, Grid, Heart, List, Search, Trash2 } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
+
+function FavoriteStatsInline() {
+  const { stats } = useAppSelector((state) => state.favorites);
+
+  if (!stats) return null;
+
+  const topCategory =
+    stats.recentCategories && Object.keys(stats.recentCategories).length > 0
+      ? Object.entries(stats.recentCategories).sort((a, b) => b[1] - a[1])[0]
+      : null;
+
+  return (
+    <div className="bg-white px-3 py-1 rounded-md shadow-sm text-sm text-gray-700 flex items-center gap-3">
+      <span className="font-medium">Total:</span>
+      <span>{stats.totalFavorites}</span>
+      {topCategory ? (
+        <span className="text-gray-500">
+          Top: {topCategory[0]} ({topCategory[1]})
+        </span>
+      ) : null}
+    </div>
+  );
+}
 
 export default function FavoritesPage() {
   const router = useRouter();
@@ -23,6 +50,8 @@ export default function FavoritesPage() {
       return;
     }
     dispatch(fetchFavorites({}));
+    // Also fetch favorite stats for analytics panel
+    dispatch(fetchFavoriteStats());
   }, [dispatch, isAuthenticated, router]);
 
   const handleRemoveFavorite = async (recipeId: string) => {
@@ -90,10 +119,18 @@ export default function FavoritesPage() {
 
             <div className="flex items-center gap-4">
               {/* Stats */}
-              <span className="text-gray-600">
-                {filteredFavorites.length} of {favorites.length} recipe
-                {favorites.length !== 1 ? 's' : ''}
-              </span>
+              <div className="flex items-center gap-4">
+                <span className="text-gray-600">
+                  {filteredFavorites.length} of {favorites.length} recipe
+                  {favorites.length !== 1 ? 's' : ''}
+                </span>
+
+                {/* Favorite stats from server */}
+                {/** show lightweight stats if available in the slice */}
+                {/** state.favorites.stats shape: { totalFavorites, recentCategories, recentCount } */}
+                {/** use selector below to render; keep UI resilient if stats are null */}
+                <FavoriteStatsInline />
+              </div>
 
               {/* View Mode Toggle */}
               <div className="flex items-center gap-2 bg-gray-200 rounded-lg p-1">
