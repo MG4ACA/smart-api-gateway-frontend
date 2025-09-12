@@ -108,7 +108,7 @@ export default function RecipeDetailPage() {
       {/* Hero Section */}
       <div className="relative h-96 md:h-[500px]">
         <RecipeImage
-          src={currentRecipe.thumbnail || '/images/recipe-placeholder.jpg'}
+          src={currentRecipe.thumbnail || '/images/recipe-placeholder.svg'}
           alt={currentRecipe.name}
           fill
           className="object-cover"

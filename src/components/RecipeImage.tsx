@@ -1,7 +1,7 @@
 'use client';
 
 import Image from 'next/image';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 interface RecipeImageProps {
   src: string;
@@ -23,8 +23,14 @@ const RecipeImage: React.FC<RecipeImageProps> = ({
   fill = false,
   ...props
 }) => {
-  const [imgSrc, setImgSrc] = useState(src);
+  const [imgSrc, setImgSrc] = useState(src || '/images/recipe-placeholder.svg');
   const [hasError, setHasError] = useState(false);
+
+  // Keep internal src in sync when parent passes a new src prop
+  useEffect(() => {
+    setHasError(false);
+    setImgSrc(src || '/images/recipe-placeholder.svg');
+  }, [src]);
 
   const handleError = () => {
     if (!hasError) {

@@ -126,7 +126,7 @@ export default function HomePage() {
               <div className="md:flex">
                 <div className="md:w-1/2">
                   <RecipeImage
-                    src={randomRecipe.thumbnail || '/images/recipe-placeholder.jpg'}
+                    src={randomRecipe.thumbnail || '/images/recipe-placeholder.svg'}
                     alt={randomRecipe.name}
                     className="h-64 md:h-full w-full object-cover"
                     width={500}

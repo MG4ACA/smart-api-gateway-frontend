@@ -119,7 +119,7 @@ export default function CategoryPage() {
                   >
                     <div className="aspect-[4/3] relative">
                       <RecipeImage
-                        src={recipe.thumbnail || '/images/recipe-placeholder.jpg'}
+                        src={recipe.thumbnail || '/images/recipe-placeholder.svg'}
                         alt={recipe.name}
                         fill
                         className="object-cover group-hover:scale-105 transition-transform duration-300"
@@ -169,7 +169,7 @@ export default function CategoryPage() {
                   >
                     <div className="w-56 h-40 relative flex-shrink-0">
                       <RecipeImage
-                        src={recipe.thumbnail || '/images/recipe-placeholder.jpg'}
+                        src={recipe.thumbnail || '/images/recipe-placeholder.svg'}
                         alt={recipe.name}
                         fill
                         className="object-cover group-hover:scale-105 transition-transform duration-300"
